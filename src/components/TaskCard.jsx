@@ -1,56 +1,86 @@
-import React from 'react';
+import React, { useState } from "react";
 
-const TaskBoard = ({ tasks, onDelete, onUpdate }) => {
+const TaskCard = ({ task, onDelete, onUpdate }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(task.title);
+  const [editedDescription, setEditedDescription] = useState(task.description);
+  const [editedStatus, setEditedStatus] = useState(task.status);
+
+  const handleSave = () => {
+    onUpdate(task.id, {
+      title: editedTitle,
+      description: editedDescription,
+      status: editedStatus,
+    });
+    setIsEditing(false);
+  };
+
   return (
-    <div>
-      <div className="flex">
-        <div className="w-1/3">
-          <h3 className="text-lg font-semibold">To Do</h3>
-          {tasks
-            .filter((task) => task.status === 'To Do')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <h4>{task.title}</h4>
-                <p>Assigned: {task.assignedTo}</p>
-                <button onClick={() => onUpdate(task.id, { status: 'In Progress' })}>
-                  Move to In Progress
-                </button>
-                <button onClick={() => onDelete(task.id)}>Delete</button>
-              </div>
-            ))}
-        </div>
+    <div className="bg-white p-4 rounded-lg shadow-md space-y-4">
+      {isEditing ? (
+        <>
+          <input
+            type="text"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            className="w-full p-2 border rounded"
+            placeholder="Edit title"
+          />
+          <textarea
+            value={editedDescription}
+            onChange={(e) => setEditedDescription(e.target.value)}
+            className="w-full p-2 border rounded"
+            placeholder="Edit description"
+          ></textarea>
+        </>
+      ) : (
+        <>
+          <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
+          <p className="text-gray-600">{task.description}</p>
+        </>
+      )}
 
-        <div className="w-1/3">
-          <h3 className="text-lg font-semibold">In Progress</h3>
-          {tasks
-            .filter((task) => task.status === 'In Progress')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <h4>{task.title}</h4>
-                <p>Assigned: {task.assignedTo}</p>
-                <button onClick={() => onUpdate(task.id, { status: 'Done' })}>
-                  Move to Done
-                </button>
-                <button onClick={() => onDelete(task.id)}>Delete</button>
-              </div>
-            ))}
-        </div>
+      {/* Dropdown for Status */}
+      <select
+        value={editedStatus}
+        onChange={(e) => {
+          setEditedStatus(e.target.value);
+          onUpdate(task.id, { status: e.target.value });
+        }}
+        className="w-full p-2 border rounded"
+      >
+        <option value="To Do">To Do</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Done">Done</option>
+      </select>
 
-        <div className="w-1/3">
-          <h3 className="text-lg font-semibold">Done</h3>
-          {tasks
-            .filter((task) => task.status === 'Done')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <h4>{task.title}</h4>
-                <p>Assigned: {task.assignedTo}</p>
-                <button onClick={() => onDelete(task.id)}>Delete</button>
-              </div>
-            ))}
-        </div>
+      {/* Buttons */}
+      <div className="flex justify-between mt-4">
+        {isEditing ? (
+          <button
+            onClick={handleSave}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Save
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsEditing(true)}
+            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+          >
+            Edit
+          </button>
+        )}
+
+        <button
+          onClick={() => onDelete(task.id)}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
 };
 
-export default TaskBoard;
+export default TaskCard;
