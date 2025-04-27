@@ -3,79 +3,60 @@ import React, { useState } from "react";
 const TaskCard = ({ task, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
-  const [editedDescription, setEditedDescription] = useState(task.description);
-  const [editedStatus, setEditedStatus] = useState(task.status);
+  const [editedDesc, setEditedDesc] = useState(task.description);
 
   const handleSave = () => {
     onUpdate(task.id, {
       title: editedTitle,
-      description: editedDescription,
-      status: editedStatus,
+      description: editedDesc,
+      status: task.status
     });
     setIsEditing(false);
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md space-y-4">
+    <div className="bg-white p-4 rounded-xl shadow-lg border border-purple-200">
       {isEditing ? (
         <>
           <input
-            type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="Edit title"
+            className="w-full bg-white border border-purple-300 rounded-lg p-2 text-gray-800 mb-2"
           />
           <textarea
-            value={editedDescription}
-            onChange={(e) => setEditedDescription(e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="Edit description"
-          ></textarea>
+            value={editedDesc}
+            onChange={(e) => setEditedDesc(e.target.value)}
+            className="w-full bg-white border border-purple-300 rounded-lg p-2 text-gray-800"
+          />
         </>
       ) : (
         <>
-          <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
-          <p className="text-gray-600">{task.description}</p>
+          <h3 className="text-lg font-medium text-gray-800">{task.title}</h3>
+          <p className="text-gray-600 mt-1">{task.description}</p>
         </>
       )}
 
-      {/* Dropdown for Status */}
       <select
-        value={editedStatus}
-        onChange={(e) => {
-          setEditedStatus(e.target.value);
-          onUpdate(task.id, { status: e.target.value });
-        }}
-        className="w-full p-2 border rounded"
+        value={task.status}
+        onChange={(e) => onUpdate(task.id, { status: e.target.value })}
+        className="w-full mt-2 bg-white border border-purple-300 text-gray-800 rounded-lg p-2"
       >
         <option value="To Do">To Do</option>
         <option value="In Progress">In Progress</option>
         <option value="Done">Done</option>
       </select>
 
-      {/* Buttons */}
       <div className="flex justify-between mt-4">
         {isEditing ? (
-          <button
-            onClick={handleSave}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
+          <button onClick={handleSave} className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600">
             Save
           </button>
         ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-          >
+          <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600">
             Edit
           </button>
         )}
-
-        <button
-          onClick={() => onDelete(task.id)}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
+        <button onClick={() => onDelete(task.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600">
           Delete
         </button>
       </div>

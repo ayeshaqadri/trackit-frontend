@@ -5,31 +5,24 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Token remove karna
     localStorage.removeItem("token");
-
-    // Login page pe redirect
     navigate("/login");
   };
 
   return (
-    <nav className="bg-blue-600 p-4 shadow-lg">
+    <nav className="bg-gradient-to-r from-purple-800 to-indigo-800 p-4 shadow-xl">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link to="/dashboard" className="text-white text-2xl font-bold">
-          Dashboard
+        <Link to="/dashboard" className="text-white text-2xl font-serif font-bold">
+          User Dashboard
         </Link>
 
-        <div className="space-x-4 flex items-center">
-          <Link to="/task-board" className="text-white">Task Board</Link>
-          <Link to="/login" className="text-white">Login</Link>
-          <Link to="/register" className="text-white">Register</Link>
-
-          {/* Logout Button */}
+        <div className="space-x-6 flex items-center">
+          <Link to="/task-board" className="text-white/90 hover:text-white transition">Task Board</Link>
           <button
             onClick={handleLogout}
-            className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition"
+            className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg border border-white/20 transition"
           >
-            Logout
+            Sign Out
           </button>
         </div>
       </div>

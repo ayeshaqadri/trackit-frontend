@@ -1,33 +1,24 @@
 import React from 'react';
-import TaskCard from './TaskCard'; // Import TaskCard
+import TaskColumn from './TaskColumn';
 
 const TaskBoard = ({ tasks = [], onDelete, onUpdate }) => {
-  const statuses = ["To Do", "In Progress", "Done"];
+  const columns = [
+    { title: "To Do", status: "To Do" },
+    { title: "In Progress", status: "In Progress" },
+    { title: "Completed", status: "Done" }
+  ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {statuses.map((status) => {
-        // Filter tasks by the current status
-        const filteredTasks = tasks.filter(task => task.status === status);
-        
-        return (
-          <div key={status} className="task-column">
-            <h2 className="text-2xl font-bold mb-4">{status}</h2>
-            {filteredTasks.length === 0 ? (
-              <p>No tasks in this column</p>
-            ) : (
-              filteredTasks.map(task => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  onDelete={onDelete}
-                  onUpdate={onUpdate}
-                />
-              ))
-            )}
-          </div>
-        );
-      })}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-gradient-to-b from-purple-50 to-white min-h-screen">
+      {columns.map(col => (
+        <TaskColumn 
+          key={col.status}
+          title={col.title}
+          tasks={tasks.filter(t => t.status === col.status)}
+          onDelete={onDelete}
+          onUpdate={onUpdate}
+        />
+      ))}
     </div>
   );
 };
